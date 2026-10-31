@@ -24,7 +24,8 @@ td{padding:8px 4px;border-bottom:1px solid #e2e8f0}.r{text-align:right}
 .grand{font-weight:700;font-size:18px;border-top:2px solid #0f172a;margin-top:4px;padding-top:8px!important}
 .wm{margin-top:50px;text-align:center;color:#94a3b8;font-size:12px}
 .upsell{background:#fef9c3;border-radius:8px;padding:10px;font-size:13px;margin-top:12px}
-@media print{header,.panel,.upsell{display:none}main{display:block;padding:0}#doc{box-shadow:none}body{background:#fff}}
+footer{text-align:center;padding:24px;font-size:13px;color:#64748b}footer a{color:#475569;margin:0 8px}
+@media print{header,.panel,.upsell,footer{display:none}main{display:block;padding:0}#doc{box-shadow:none}body{background:#fff}}
 </style></head><body>
 <header><b>QuoteSnap</b><span>Professional quotes & invoices in 60 seconds</span></header>
 <main>
@@ -42,11 +43,13 @@ td{padding:8px 4px;border-bottom:1px solid #e2e8f0}.r{text-align:right}
 <label>Currency symbol</label><input id="cur" value="$">
 <label>Notes / payment terms</label><textarea id="notes" rows="3">Payment due within 14 days.</textarea>
 <button class="pri" onclick="window.print()">Download PDF (Print → Save as PDF)</button>
-<div class="upsell">Free version adds a small "Made with QuoteSnap" footer.
-<a href="#" id="buy" target="_blank">Remove it for $9, one time →</a></div>
+<div class="upsell"><b>Free to use.</b> The free version adds a small "Made with QuoteSnap" footer.
+<br><b>QuoteSnap Pro – $9, one time:</b> removes the footer from all your documents. No subscription. 7-day money-back guarantee.
+<br><a href="#" id="buy" target="_blank">Remove the footer for $9 →</a></div>
 </div>
 <div id="doc"></div>
 </main>
+<footer><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refunds.html">Refunds</a><a href="contact.html">Contact</a><br>© 2026 QuoteSnap · friersonmarcus5@gmail.com</footer>
 <script>
 // === CONFIG: paste your Stripe Payment Link here ===
 const PAYMENT_LINK="#";

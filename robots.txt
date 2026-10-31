@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://marndmee-beep.github.io/quotesnap/sitemap.xml

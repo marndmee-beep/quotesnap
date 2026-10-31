@@ -1,93 +1,62 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>QuoteSnap – Free Quote & Invoice Generator</title>
-<meta name="description" content="Create a professional quote or invoice in 60 seconds. Free PDF download.">
+<title>Free Quote &amp; Invoice Generator | QuoteSnap</title>
+<meta name="description" content="Create a professional quote or invoice in your browser in 60 seconds. No signup, no monthly fee. Download a PDF free, or remove the footer for a one-time $9.">
+<link rel="canonical" href="https://marndmee-beep.github.io/quotesnap/">
+<meta property="og:title" content="Free Quote &amp; Invoice Generator | QuoteSnap">
+<meta property="og:description" content="No signup, no subscription. Make a PDF quote or invoice in a minute.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://marndmee-beep.github.io/quotesnap/">
+<link rel="icon" href="favicon.png">
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:#f1f5f9;color:#0f172a}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:#f1f5f9;color:#0f172a;line-height:1.6}
 header{background:#0f172a;color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-header b{font-size:20px}header span{color:#94a3b8;font-size:14px}
-main{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:20px;padding:20px;max-width:1200px;margin:auto}
-@media(max-width:800px){main{grid-template-columns:1fr}}
-.panel{background:#fff;border-radius:12px;padding:18px;box-shadow:0 1px 3px #0002}
-label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px;color:#475569}
-input,textarea,select{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}
-.row{display:grid;grid-template-columns:3fr 1fr 1.3fr auto;gap:6px;margin-bottom:6px}
-button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;font-weight:600;font:inherit}
-.pri{background:#0ea5e9;color:#fff;width:100%;margin-top:14px}.sec{background:#e2e8f0}
-.x{background:#fee2e2;color:#b91c1c;padding:6px 10px}
-#doc{background:#fff;padding:40px;min-height:600px;border-radius:12px;box-shadow:0 1px 3px #0002}
-#doc h1{margin:0;font-size:30px;letter-spacing:2px;color:#0ea5e9}
-table{width:100%;border-collapse:collapse;margin:24px 0}th{text-align:left;border-bottom:2px solid #0f172a;padding:8px 4px;font-size:13px}
-td{padding:8px 4px;border-bottom:1px solid #e2e8f0}.r{text-align:right}
-.tot{margin-left:auto;width:240px}.tot div{display:flex;justify-content:space-between;padding:4px 0}
-.grand{font-weight:700;font-size:18px;border-top:2px solid #0f172a;margin-top:4px;padding-top:8px!important}
-.wm{margin-top:50px;text-align:center;color:#94a3b8;font-size:12px}
-.upsell{background:#fef9c3;border-radius:8px;padding:10px;font-size:13px;margin-top:12px}
-footer{text-align:center;padding:24px;font-size:13px;color:#64748b}footer a{color:#475569;margin:0 8px}
-@media print{header,.panel,.upsell,footer{display:none}main{display:block;padding:0}#doc{box-shadow:none}body{background:#fff}}
+header a{color:#fff;text-decoration:none;font-size:20px;font-weight:700}header a span{color:#38bdf8}
+header nav a{font-size:14px;font-weight:400;color:#cbd5e1;margin-left:16px;text-decoration:none}
+.wrap{max-width:960px;margin:auto;padding:40px 20px}
+h1{font-size:38px;line-height:1.2;margin:0 0 12px}
+.lead{font-size:19px;color:#475569;margin:0 0 24px}
+.cta{display:inline-block;background:#0ea5e9;color:#fff;padding:14px 26px;border-radius:10px;text-decoration:none;font-weight:700;font-size:17px}
+.cta:hover{background:#0284c7}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin:36px 0}
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px #0002}
+.card h3{margin:0 0 6px;font-size:17px}.card p{margin:0;color:#475569;font-size:15px}
+h2{font-size:26px;margin:40px 0 12px}
+ul{padding-left:20px}li{margin-bottom:8px}
+.price{background:#fff;border:2px solid #0ea5e9;border-radius:12px;padding:24px;max-width:440px;margin:30px 0}
+.price b{font-size:32px}
+.pages{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:20px 0}
+.pages a{background:#fff;border-radius:10px;padding:16px;text-decoration:none;color:#0f172a;box-shadow:0 1px 3px #0002;font-weight:600}
+.pages a small{display:block;font-weight:400;color:#64748b;margin-top:4px}
+footer{text-align:center;padding:30px 20px;font-size:13px;color:#64748b;border-top:1px solid #e2e8f0;margin-top:50px}
+footer a{color:#475569;margin:0 8px}
 </style></head><body>
-<header><b>QuoteSnap</b><span>Professional quotes & invoices in 60 seconds</span></header>
-<main>
-<div class="panel">
-<label>Document type</label><select id="type"><option>QUOTE</option><option>INVOICE</option></select>
-<label>Your business name</label><input id="biz" placeholder="Smith Plumbing">
-<label>Your contact (email / phone / address)</label><textarea id="bizc" rows="2"></textarea>
-<label>Client name & address</label><textarea id="cli" rows="2"></textarea>
-<label>Number</label><input id="num" value="001">
-<label>Date</label><input id="date" type="date">
-<label>Line items (description, qty, unit price)</label>
-<div id="items"></div>
-<button class="sec" onclick="addItem()">+ Add item</button>
-<label>Tax %</label><input id="tax" type="number" value="0" min="0">
-<label>Currency symbol</label><input id="cur" value="$">
-<label>Notes / payment terms</label><textarea id="notes" rows="3">Payment due within 14 days.</textarea>
-<button class="pri" onclick="window.print()">Download PDF (Print → Save as PDF)</button>
-<div class="upsell"><b>Free to use.</b> The free version adds a small "Made with QuoteSnap" footer.
-<br><b>QuoteSnap Pro – $9, one time:</b> removes the footer from all your documents. No subscription. 7-day money-back guarantee.
-<br><a href="#" id="buy" target="_blank">Remove the footer for $9 →</a></div>
+<header><a href="./">Quote<span>Snap</span></a><nav><a href="plumbers.html">For traders</a><a href="contractors.html">For contractors</a><a href="freelancers.html">For freelancers</a><a href="guides.html">Guides</a></nav></header>
+<div class="wrap">
+<h1>Free quote and invoice generator</h1>
+<p class="lead">Type in the job, add your line items, download a PDF. No account, no email signup, no monthly subscription. Takes about 60 seconds and works on your phone.</p>
+<a class="cta" href="generator.html">Open the generator →</a>
+<div class="grid">
+<div class="card"><h3>Nothing to install</h3><p>It runs in your browser. No app store, no download, no login to forget.</p></div>
+<div class="card"><h3>Your data stays with you</h3><p>What you type is saved in your own browser so you can reuse it. It never reaches a server.</p></div>
+<div class="card"><h3>Quotes and invoices</h3><p>Switch document type, set your tax rate and currency, and add as many line items as you need.</p></div>
+<div class="card"><h3>Honest pricing</h3><p>Free to use forever. Optional one-time $9 removes the small footer from your PDFs.</p></div>
 </div>
-<div id="doc"></div>
-</main>
-<footer><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refunds.html">Refunds</a><a href="contact.html">Contact</a><br>© 2026 QuoteSnap · friersonmarcus5@gmail.com</footer>
-<script>
-const PAYMENT_LINK="https://buy.stripe.com/28E9AUdWed8B65i6gd4Rq01";
-// Buyers are sent here after paying: .../quotesnap/?pro=snap-7kq4m2xv
-const PRO_CODE="snap-7kq4m2xv";
-const params=new URLSearchParams(location.search);
-if(params.get("pro")===PRO_CODE)localStorage.setItem("qs_pro","1");
-const pro=localStorage.getItem("qs_pro")==="1";
-document.getElementById("buy").href=PAYMENT_LINK;
-if(pro)document.querySelector(".upsell").style.display="none";
-const $=id=>document.getElementById(id);
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-let items=JSON.parse(localStorage.getItem("qs_items")||'[["Service",1,100]]');
-function addItem(){items.push(["",1,0]);draw()}
-function del(i){items.splice(i,1);draw()}
-function draw(){
- $("items").innerHTML=items.map((it,i)=>`<div class="row">
- <input value="${esc(it[0])}" oninput="items[${i}][0]=this.value;render()">
- <input type="number" value="${it[1]}" oninput="items[${i}][1]=+this.value;render()">
- <input type="number" value="${it[2]}" oninput="items[${i}][2]=+this.value;render()">
- <button class="x" onclick="del(${i})">×</button></div>`).join("");render()}
-function render(){
- const c=esc($("cur").value),f=n=>c+n.toFixed(2);
- const sub=items.reduce((s,i)=>s+i[1]*i[2],0),tax=sub*(+$("tax").value||0)/100;
- $("doc").innerHTML=`<div style="display:flex;justify-content:space-between"><div><h1>${esc($("type").value)}</h1>
- <div>#${esc($("num").value)}<br>${esc($("date").value)}</div></div>
- <div style="text-align:right"><b>${esc($("biz").value)}</b><br>${esc($("bizc").value).replace(/\n/g,"<br>")}</div></div>
- <p style="margin-top:28px"><b>Bill to</b><br>${esc($("cli").value).replace(/\n/g,"<br>")}</p>
- <table><tr><th>Description</th><th class="r">Qty</th><th class="r">Price</th><th class="r">Amount</th></tr>
- ${items.map(i=>`<tr><td>${esc(i[0])}</td><td class="r">${i[1]}</td><td class="r">${f(i[2])}</td><td class="r">${f(i[1]*i[2])}</td></tr>`).join("")}</table>
- <div class="tot"><div><span>Subtotal</span><span>${f(sub)}</span></div><div><span>Tax</span><span>${f(tax)}</span></div>
- <div class="grand"><span>Total</span><span>${f(sub+tax)}</span></div></div>
- <p style="margin-top:30px;white-space:pre-line">${esc($("notes").value)}</p>
- ${pro?"":'<div class="wm">Made with QuoteSnap</div>'}`;
- localStorage.setItem("qs_items",JSON.stringify(items));
- ["biz","bizc","cli","num","notes","cur","tax","type"].forEach(k=>localStorage.setItem("qs_"+k,$(k).value));
-}
-["biz","bizc","cli","num","date","notes","cur","tax","type"].forEach(k=>{
- const v=localStorage.getItem("qs_"+k);if(v!==null)$(k).value=v;$(k).addEventListener("input",render)});
-if(!$("date").value)$("date").value=new Date().toISOString().slice(0,10);
-draw();
-</script></body></html>
+<h2>Start from your trade</h2>
+<div class="pages">
+<a href="plumbers.html">Plumbers, electricians &amp; builders<small>Quote template for trades</small></a>
+<a href="contractors.html">Contractors &amp; general builders<small>Materials, labour and permits</small></a>
+<a href="freelancers.html">Freelancers &amp; consultants<small>Hourly and project invoicing</small></a>
+<a href="guides.html">Guides<small>Quoting, invoicing and getting paid</small></a>
+</div>
+<h2>Who it's for</h2>
+<ul><li><b>Self-employed traders</b> quoting jobs from a van or a kitchen table.</li><li><b>Freelancers</b> who invoice a handful of clients and don't want another subscription.</li><li><b>Anyone</b> who needs a clean PDF quote without opening a spreadsheet.</li></ul>
+<div class="price"><div style="color:#475569;font-size:14px">Free</div><b>$0</b>
+<p style="margin:6px 0 0">Everything above, with a small "Made with QuoteSnap" footer on the PDF.</p>
+<div style="color:#475569;font-size:14px;margin-top:18px">QuoteSnap Pro, one time</div><b>$9</b>
+<p style="margin:6px 0 0">Removes the footer from every document. No subscription, no renewals. 7-day money-back guarantee.</p></div>
+<p><a href="contact.html">Questions or bugs — email us.</a></p>
+</div>
+<footer><a href="generator.html">Generator</a><a href="plumbers.html">For traders</a><a href="contractors.html">For contractors</a><a href="freelancers.html">For freelancers</a><a href="guides.html">Guides</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refunds.html">Refunds</a><a href="contact.html">Contact</a><br>© 2026 QuoteSnap · friersonmarcus5@gmail.com</footer>
+</body></html>

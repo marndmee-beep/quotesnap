@@ -58,6 +58,11 @@ footer{text-align:center;padding:24px;font-size:13px;color:#64748b}footer a{colo
 <div class="upsell"><b>Free to use.</b> The free version adds a small "Made with QuoteSnap" footer.
 <br><b>QuoteSnap Pro – $9, one time:</b> removes the footer from all your documents. No subscription. 7-day money-back guarantee.
 <br><a href="#" id="buy" target="_blank">Remove the footer for $9 →</a></div>
+<div class="upsell" style="background:#e0f2fe"><b>Free template pack.</b> Get the ready-made line items for your trade plus our quoting guides, sent to your inbox.
+<form id="listform" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+<input type="email" id="listemail" placeholder="you@business.com" required style="flex:1;min-width:180px">
+<button class="sec" type="submit">Send it</button></form>
+<div id="listmsg" style="font-size:12px;margin-top:6px"></div></div>
 </div>
 <div id="doc"></div>
 </main>
@@ -65,6 +70,7 @@ footer{text-align:center;padding:24px;font-size:13px;color:#64748b}footer a{colo
 <script>
 const PAYMENT_LINK="https://buy.stripe.com/6oU28s4lE5G99huawt4Rq03";
 const PRO_CODE="snap-7kq4m2xv";
+const LIST_ENDPOINT="https://formsubmit.co/ajax/REPLACE-WITH-YOUR-LIST-ADDRESS";
 const TRADES={
 "Trades & home":[['Plumber','Diagnostic / call-out fee','Supply and fit replacement tap'],['Electrician','Fault finding, first hour','Supply and fit socket outlet'],['Builder','Day rate, labour only','Materials and waste removal'],['Carpenter','Fitting day rate','Supply and fit skirting'],['Roofer','Scaffold erection','Strip and re-cover roof section'],['Plasterer','Board and skim, per m2','Patch repair'],['Painter & decorator','Preparation and priming','Two coats emulsion, per room'],['Landscaper','Design and groundwork','Turf supply and lay'],['Cleaner','Deep clean, per bedroom','End of tenancy clean'],['Removal & haulage','Van and two movers, per hour','Waste disposal fee'],['Locksmith','Emergency call-out','Supply and fit lock cylinder'],['HVAC technician','Service and safety check','Refrigerant top-up']],
 "Freelance & creative":[['Photographer','Half-day shoot','Edited image delivery, per 10'],['Videographer','Filming day','Edit and colour grade'],['Graphic designer','Logo concepts, three routes','Brand guidelines document'],['Web developer','Page build','Bug fix, per hour'],['Copywriter','Blog article, 1,000 words','Landing page copy'],['Social media manager','Monthly management retainer','Content calendar'],['Virtual assistant','Hourly retainer, per month','Inbox management'],['Consultant','Discovery session','Strategy report'],['Tutor','One-hour session','Block of ten sessions'],['Personal trainer','One-to-one session','Six-week programme'],['Musician','Event performance, two sets','Travel and equipment'],['Translator','Translation, per 1,000 words','Certified copy']],
@@ -119,5 +125,18 @@ function render(){
 ["biz","bizc","cli","num","date","notes","cur","tax","type"].forEach(k=>{
  const v=localStorage.getItem("qs_"+k);if(v!==null)$(k).value=v;$(k).addEventListener("input",render)});
 if(!$("date").value)$("date").value=new Date().toISOString().slice(0,10);
+$("listform").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const email=$("listemail").value.trim();
+ $("listmsg").textContent="Sending...";
+ try{
+  const r=await fetch(LIST_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},
+   body:JSON.stringify({email:email,trade:localStorage.getItem("qs_cat")||"unspecified",_subject:"QuoteSnap list signup",_template:"table"})});
+  if(!r.ok)throw new Error("bad status");
+  location.href="thanks.html";
+ }catch(err){
+  $("listmsg").textContent="Could not send just now. Please try again in a moment.";
+ }
+});
 drawPresets();draw();
 </script></body></html>

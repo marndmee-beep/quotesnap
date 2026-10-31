@@ -8,7 +8,7 @@
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:#f1f5f9;color:#0f172a}
 header{background:#0f172a;color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 header b{font-size:20px}header span{color:#94a3b8;font-size:14px}header a{color:#94a3b8;font-size:13px;text-decoration:none;margin-left:14px}
-main{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:20px;padding:20px;max-width:1200px;margin:auto}
+main{display:grid;grid-template-columns:minmax(320px,470px) 1fr;gap:20px;padding:20px;max-width:1240px;margin:auto}
 @media(max-width:800px){main{grid-template-columns:1fr}}
 .panel{background:#fff;border-radius:12px;padding:18px;box-shadow:0 1px 3px #0002}
 label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px;color:#475569}
@@ -16,11 +16,11 @@ input,textarea,select{width:100%;padding:9px;border:1px solid #cbd5e1;border-rad
 .cat{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .cat button{background:#e2e8f0;color:#0f172a;font-size:13px;padding:7px 11px;border-radius:999px}
 .cat button.on{background:#0ea5e9;color:#fff}
-.catcard{background:#fff;border-radius:12px;padding:18px;box-shadow:0 1px 3px #0002;margin-bottom:16px}
-.catcard h3{margin:0 0 10px;font-size:16px;text-transform:capitalize}
-.presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
-.presets button{background:#f8fafc;border:1px solid #e2e8f0;text-align:left;font-weight:500;font-size:13px;line-height:1.4}
+.presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:7px}
+.presets button{background:#f8fafc;border:1px solid #e2e8f0;text-align:left;font-weight:500;font-size:12.5px;line-height:1.35;padding:8px 10px}
 .presets button:hover{background:#e0f2fe;border-color:#0ea5e9}
+.tradeblk{border:1px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:10px}
+.tradeblk h3{margin:0 0 8px;font-size:14px;text-transform:capitalize;color:#0f172a}
 .row{display:grid;grid-template-columns:3fr 1fr 1.3fr auto;gap:6px;margin-bottom:6px}
 button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;font-weight:600;font:inherit}
 .pri{background:#0ea5e9;color:#fff;width:100%;margin-top:14px}.sec{background:#e2e8f0}
@@ -33,8 +33,9 @@ td{padding:8px 4px;border-bottom:1px solid #e2e8f0}.r{text-align:right}
 .grand{font-weight:700;font-size:18px;border-top:2px solid #0f172a;margin-top:4px;padding-top:8px!important}
 .wm{margin-top:50px;text-align:center;color:#94a3b8;font-size:12px}
 .upsell{background:#fef9c3;border-radius:8px;padding:10px;font-size:13px;margin-top:12px}
+.faq{font-size:14px;color:#374151}.faq b{display:block;margin-top:12px}
 footer{text-align:center;padding:24px;font-size:13px;color:#64748b}footer a{color:#475569;margin:0 8px}
-@media print{header,.panel,.upsell,footer{display:none}main{display:block;padding:0}#doc{box-shadow:none}body{background:#fff}}
+@media print{header,.panel,.upsell,footer,.faq{display:none}main{display:block;padding:0}#doc{box-shadow:none}body{background:#fff}}
 </style></head><body>
 <header><b>QuoteSnap</b><span>Professional quotes & invoices in 60 seconds</span><a href="./">Home</a><a href="templates.html">Templates</a><a href="guides.html">Guides</a></header>
 <main>
@@ -43,28 +44,45 @@ footer{text-align:center;padding:24px;font-size:13px;color:#64748b}footer a{colo
 <div class="cat" id="cats"></div>
 <div id="presets"></div>
 <label>Your business name</label><input id="biz" placeholder="Smith Plumbing">
-<label>Your contact (email / phone / address)</label><textarea id="bizc" rows="2"></textarea>
+<label>Your email</label><input id="bizemail" placeholder="you@business.com">
+<label>Your contact (phone / address)</label><textarea id="bizc" rows="2"></textarea>
 <label>Client name & address</label><textarea id="cli" rows="2"></textarea>
 <label>Document type</label><select id="type"><option>QUOTE</option><option>INVOICE</option></select>
 <label>Number</label><input id="num" value="001">
-<label>Date</label><input id="date" type="date">
+<label>Issue date</label><input id="date" type="date">
+<label>Due date</label><input id="due" type="date">
 <label>Line items (description, qty, unit price)</label>
 <div id="items"></div>
 <button class="sec" onclick="addItem()">+ Add item</button>
+<label>Currency</label><select id="cur"><option>$</option><option>£</option><option>€</option><option>A$</option><option>C$</option><option>₹</option></select>
+<label>Discount</label><input id="disc" type="number" value="0" min="0" step="0.01">
+<label>Discount type</label><select id="disctype"><option value="flat">Amount</option><option value="pct">Percent</option></select>
+<label>Deposit already paid</label><input id="dep" type="number" value="0" min="0" step="0.01">
 <label>Tax %</label><input id="tax" type="number" value="0" min="0">
-<label>Currency symbol</label><input id="cur" value="$">
 <label>Notes / payment terms</label><textarea id="notes" rows="3">Payment due within 14 days.</textarea>
 <button class="pri" onclick="window.print()">Download PDF (Print → Save as PDF)</button>
 <div class="upsell"><b>Free to use.</b> The free version adds a small "Made with QuoteSnap" footer.
 <br><b>QuoteSnap Pro – $9, one time:</b> removes the footer from all your documents. No subscription. 7-day money-back guarantee.
 <br><a href="#" id="buy" target="_blank">Remove the footer for $9 →</a></div>
-<div class="upsell" style="background:#e0f2fe"><b>Free template pack.</b> Get the ready-made line items for your trade plus our quoting guides, sent to your inbox.
+<div class="upsell" style="background:#e0f2fe"><b>Free template pack.</b> Ready-made line items for your trade plus our quoting guides, by email.
 <form id="listform" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-<input type="email" id="listemail" placeholder="you@business.com" required style="flex:1;min-width:180px">
+<input type="email" id="listemail" placeholder="you@business.com" required style="flex:1;min-width:170px">
 <button class="sec" type="submit">Send it</button></form>
 <div id="listmsg" style="font-size:12px;margin-top:6px"></div></div>
 </div>
+<div>
 <div id="doc"></div>
+<div class="faq" style="background:#fff;border-radius:12px;padding:18px;margin-top:20px;box-shadow:0 1px 3px #0002">
+<b>Is it really free?</b>
+Yes. Creating and downloading as many quotes and invoices as you like costs nothing and needs no account. The free PDF carries one small credit line at the bottom.
+<b>Do I need to sign up?</b>
+No. What you type is saved in your own browser so it's there next time, and it never leaves your device.
+<b>Does the footer appear on Pro documents?</b>
+No. The one-time $9 removes it from every document, permanently. There is no subscription.
+<b>Can I get a refund?</b>
+Yes, within 7 days, for any reason. See the <a href="refunds.html">refund policy</a>.
+</div>
+</div>
 </main>
 <footer><a href="./">Home</a><a href="templates.html">Templates</a><a href="guides.html">Guides</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refunds.html">Refunds</a><a href="contact.html">Contact</a><br>© 2026 QuoteSnap · friersonmarcus5@gmail.com</footer>
 <script>
@@ -89,7 +107,7 @@ function drawPresets(){
  if(!cats.includes(localStorage.getItem("qs_cat")))localStorage.setItem("qs_cat",cats[0]);
  const cat=localStorage.getItem("qs_cat");
  $("cats").innerHTML=cats.map(c=>`<button class="${c===cat?'on':''}" onclick="setCat('${c}')">${c}</button>`).join("");
- $("presets").innerHTML=TRADES[cat].map(t=>`<div class="catcard"><h3>${t[0]}</h3>
+ $("presets").innerHTML=TRADES[cat].map(t=>`<div class="tradeblk"><h3>${t[0]}</h3>
  <div class="presets">${t.slice(1).map(s=>`<button onclick="applyPreset('${s.replace(/'/g,'')}')">${s}</button>`).join("")}</div></div>`).join("");
 }
 function setCat(c){localStorage.setItem("qs_cat",c);drawPresets()}
@@ -108,21 +126,28 @@ function draw(){
  <button class="x" onclick="del(${i})">×</button></div>`).join("");render()}
 function render(){
  const c=esc($("cur").value),f=n=>c+n.toFixed(2);
- const sub=items.reduce((s,i)=>s+i[1]*i[2],0),tax=sub*(+$("tax").value||0)/100;
+ const sub=items.reduce((s,i)=>s+i[1]*i[2],0);
+ const dv=+$("disc").value||0;
+ const disc=$("disctype").value==="pct"?sub*dv/100:dv;
+ const tax=(sub-disc)*(+$("tax").value||0)/100;
+ const total=sub-disc+tax, dep=+$("dep").value||0;
  $("doc").innerHTML=`<div style="display:flex;justify-content:space-between"><div><h1>${esc($("type").value)}</h1>
- <div>#${esc($("num").value)}<br>${esc($("date").value)}</div></div>
- <div style="text-align:right"><b>${esc($("biz").value)}</b><br>${esc($("bizc").value).replace(/\n/g,"<br>")}</div></div>
+ <div>#${esc($("num").value)}<br>Issued ${esc($("date").value)}${$("due").value?"<br>Due "+esc($("due").value):""}</div></div>
+ <div style="text-align:right"><b>${esc($("biz").value)}</b><br>${esc($("bizemail").value)}<br>${esc($("bizc").value).replace(/\n/g,"<br>")}</div></div>
  <p style="margin-top:28px"><b>Bill to</b><br>${esc($("cli").value).replace(/\n/g,"<br>")}</p>
  <table><tr><th>Description</th><th class="r">Qty</th><th class="r">Price</th><th class="r">Amount</th></tr>
  ${items.map(i=>`<tr><td>${esc(i[0])}</td><td class="r">${i[1]}</td><td class="r">${f(i[2])}</td><td class="r">${f(i[1]*i[2])}</td></tr>`).join("")}</table>
- <div class="tot"><div><span>Subtotal</span><span>${f(sub)}</span></div><div><span>Tax</span><span>${f(tax)}</span></div>
- <div class="grand"><span>Total</span><span>${f(sub+tax)}</span></div></div>
+ <div class="tot"><div><span>Subtotal</span><span>${f(sub)}</span></div>
+ ${disc?`<div><span>Discount</span><span>-${f(disc)}</span></div>`:""}
+ <div><span>Tax</span><span>${f(tax)}</span></div>
+ ${dep?`<div><span>Deposit paid</span><span>-${f(dep)}</span></div>`:""}
+ <div class="grand"><span>${dep?"Balance due":"Total"}</span><span>${f(total-dep)}</span></div></div>
  <p style="margin-top:30px;white-space:pre-line">${esc($("notes").value)}</p>
  ${pro?"":'<div class="wm">Made with QuoteSnap</div>'}`;
  localStorage.setItem("qs_items",JSON.stringify(items));
- ["biz","bizc","cli","num","notes","cur","tax","type"].forEach(k=>localStorage.setItem("qs_"+k,$(k).value));
+ ["biz","bizemail","bizc","cli","num","notes","cur","tax","disc","disctype","dep","type"].forEach(k=>localStorage.setItem("qs_"+k,$(k).value));
 }
-["biz","bizc","cli","num","date","notes","cur","tax","type"].forEach(k=>{
+["biz","bizemail","bizc","cli","num","date","due","notes","cur","tax","disc","disctype","dep","type"].forEach(k=>{
  const v=localStorage.getItem("qs_"+k);if(v!==null)$(k).value=v;$(k).addEventListener("input",render)});
 if(!$("date").value)$("date").value=new Date().toISOString().slice(0,10);
 $("listform").addEventListener("submit",async e=>{

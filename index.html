@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QuoteSnap – Free Quote & Invoice Generator</title>
+<meta name="description" content="Create a professional quote or invoice in 60 seconds. Free PDF download.">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:#f1f5f9;color:#0f172a}
+header{background:#0f172a;color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+header b{font-size:20px}header span{color:#94a3b8;font-size:14px}
+main{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:20px;padding:20px;max-width:1200px;margin:auto}
+@media(max-width:800px){main{grid-template-columns:1fr}}
+.panel{background:#fff;border-radius:12px;padding:18px;box-shadow:0 1px 3px #0002}
+label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px;color:#475569}
+input,textarea,select{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}
+.row{display:grid;grid-template-columns:3fr 1fr 1.3fr auto;gap:6px;margin-bottom:6px}
+button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;font-weight:600;font:inherit}
+.pri{background:#0ea5e9;color:#fff;width:100%;margin-top:14px}.sec{background:#e2e8f0}
+.x{background:#fee2e2;color:#b91c1c;padding:6px 10px}
+#doc{background:#fff;padding:40px;min-height:600px;border-radius:12px;box-shadow:0 1px 3px #0002}
+#doc h1{margin:0;font-size:30px;letter-spacing:2px;color:#0ea5e9}
+table{width:100%;border-collapse:collapse;margin:24px 0}th{text-align:left;border-bottom:2px solid #0f172a;padding:8px 4px;font-size:13px}
+td{padding:8px 4px;border-bottom:1px solid #e2e8f0}.r{text-align:right}
+.tot{margin-left:auto;width:240px}.tot div{display:flex;justify-content:space-between;padding:4px 0}
+.grand{font-weight:700;font-size:18px;border-top:2px solid #0f172a;margin-top:4px;padding-top:8px!important}
+.wm{margin-top:50px;text-align:center;color:#94a3b8;font-size:12px}
+.upsell{background:#fef9c3;border-radius:8px;padding:10px;font-size:13px;margin-top:12px}
+@media print{header,.panel,.upsell{display:none}main{display:block;padding:0}#doc{box-shadow:none}body{background:#fff}}
+</style></head><body>
+<header><b>QuoteSnap</b><span>Professional quotes & invoices in 60 seconds</span></header>
+<main>
+<div class="panel">
+<label>Document type</label><select id="type"><option>QUOTE</option><option>INVOICE</option></select>
+<label>Your business name</label><input id="biz" placeholder="Smith Plumbing">
+<label>Your contact (email / phone / address)</label><textarea id="bizc" rows="2"></textarea>
+<label>Client name & address</label><textarea id="cli" rows="2"></textarea>
+<label>Number</label><input id="num" value="001">
+<label>Date</label><input id="date" type="date">
+<label>Line items (description, qty, unit price)</label>
+<div id="items"></div>
+<button class="sec" onclick="addItem()">+ Add item</button>
+<label>Tax %</label><input id="tax" type="number" value="0" min="0">
+<label>Currency symbol</label><input id="cur" value="$">
+<label>Notes / payment terms</label><textarea id="notes" rows="3">Payment due within 14 days.</textarea>
+<button class="pri" onclick="window.print()">Download PDF (Print → Save as PDF)</button>
+<div class="upsell">Free version adds a small "Made with QuoteSnap" footer.
+<a href="#" id="buy" target="_blank">Remove it for $9, one time →</a></div>
+</div>
+<div id="doc"></div>
+</main>
+<script>
+// === CONFIG: paste your Stripe Payment Link here ===
+const PAYMENT_LINK="#";
+// After buying, customers add ?pro=YOURCODE to the URL (set in your Stripe confirmation message).
+const PRO_CODE="CHANGE-ME";
+const pro=new URLSearchParams(location.search).get("pro")===PRO_CODE;
+document.getElementById("buy").href=PAYMENT_LINK;
+if(pro)document.querySelector(".upsell").style.display="none";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let items=JSON.parse(localStorage.getItem("qs_items")||'[["Service",1,100]]');
+function addItem(){items.push(["",1,0]);draw()}
+function del(i){items.splice(i,1);draw()}
+function draw(){
+ $("items").innerHTML=items.map((it,i)=>`<div class="row">
+ <input value="${esc(it[0])}" oninput="items[${i}][0]=this.value;render()">
+ <input type="number" value="${it[1]}" oninput="items[${i}][1]=+this.value;render()">
+ <input type="number" value="${it[2]}" oninput="items[${i}][2]=+this.value;render()">
+ <button class="x" onclick="del(${i})">×</button></div>`).join("");render()}
+function render(){
+ const c=esc($("cur").value),f=n=>c+n.toFixed(2);
+ const sub=items.reduce((s,i)=>s+i[1]*i[2],0),tax=sub*(+$("tax").value||0)/100;
+ $("doc").innerHTML=`<div style="display:flex;justify-content:space-between"><div><h1>${esc($("type").value)}</h1>
+ <div>#${esc($("num").value)}<br>${esc($("date").value)}</div></div>
+ <div style="text-align:right"><b>${esc($("biz").value)}</b><br>${esc($("bizc").value).replace(/\n/g,"<br>")}</div></div>
+ <p style="margin-top:28px"><b>Bill to</b><br>${esc($("cli").value).replace(/\n/g,"<br>")}</p>
+ <table><tr><th>Description</th><th class="r">Qty</th><th class="r">Price</th><th class="r">Amount</th></tr>
+ ${items.map(i=>`<tr><td>${esc(i[0])}</td><td class="r">${i[1]}</td><td class="r">${f(i[2])}</td><td class="r">${f(i[1]*i[2])}</td></tr>`).join("")}</table>
+ <div class="tot"><div><span>Subtotal</span><span>${f(sub)}</span></div><div><span>Tax</span><span>${f(tax)}</span></div>
+ <div class="grand"><span>Total</span><span>${f(sub+tax)}</span></div></div>
+ <p style="margin-top:30px;white-space:pre-line">${esc($("notes").value)}</p>
+ ${pro?"":'<div class="wm">Made with QuoteSnap</div>'}`;
+ localStorage.setItem("qs_items",JSON.stringify(items));
+ ["biz","bizc","cli","num","notes","cur","tax","type"].forEach(k=>localStorage.setItem("qs_"+k,$(k).value));
+}
+["biz","bizc","cli","num","date","notes","cur","tax","type"].forEach(k=>{
+ const v=localStorage.getItem("qs_"+k);if(v!==null)$(k).value=v;$(k).addEventListener("input",render)});
+if(!$("date").value)$("date").value=new Date().toISOString().slice(0,10);
+draw();
+</script></body></html>

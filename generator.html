@@ -13,6 +13,14 @@ main{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:20px;padding
 .panel{background:#fff;border-radius:12px;padding:18px;box-shadow:0 1px 3px #0002}
 label{display:block;font-size:12px;font-weight:600;margin:10px 0 4px;color:#475569}
 input,textarea,select{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:8px;font:inherit}
+.cat{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.cat button{background:#e2e8f0;color:#0f172a;font-size:13px;padding:7px 11px;border-radius:999px}
+.cat button.on{background:#0ea5e9;color:#fff}
+.catcard{background:#fff;border-radius:12px;padding:18px;box-shadow:0 1px 3px #0002;margin-bottom:16px}
+.catcard h3{margin:0 0 10px;font-size:16px;text-transform:capitalize}
+.presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.presets button{background:#f8fafc;border:1px solid #e2e8f0;text-align:left;font-weight:500;font-size:13px;line-height:1.4}
+.presets button:hover{background:#e0f2fe;border-color:#0ea5e9}
 .row{display:grid;grid-template-columns:3fr 1fr 1.3fr auto;gap:6px;margin-bottom:6px}
 button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;font-weight:600;font:inherit}
 .pri{background:#0ea5e9;color:#fff;width:100%;margin-top:14px}.sec{background:#e2e8f0}
@@ -28,13 +36,16 @@ td{padding:8px 4px;border-bottom:1px solid #e2e8f0}.r{text-align:right}
 footer{text-align:center;padding:24px;font-size:13px;color:#64748b}footer a{color:#475569;margin:0 8px}
 @media print{header,.panel,.upsell,footer{display:none}main{display:block;padding:0}#doc{box-shadow:none}body{background:#fff}}
 </style></head><body>
-<header><b>QuoteSnap</b><span>Professional quotes & invoices in 60 seconds</span><a href="./">Home</a><a href="guides.html">Guides</a></header>
+<header><b>QuoteSnap</b><span>Professional quotes & invoices in 60 seconds</span><a href="./">Home</a><a href="templates.html">Templates</a><a href="guides.html">Guides</a></header>
 <main>
 <div class="panel">
-<label>Document type</label><select id="type"><option>QUOTE</option><option>INVOICE</option></select>
+<label>Quick start – pick your trade or work</label>
+<div class="cat" id="cats"></div>
+<div id="presets"></div>
 <label>Your business name</label><input id="biz" placeholder="Smith Plumbing">
 <label>Your contact (email / phone / address)</label><textarea id="bizc" rows="2"></textarea>
 <label>Client name & address</label><textarea id="cli" rows="2"></textarea>
+<label>Document type</label><select id="type"><option>QUOTE</option><option>INVOICE</option></select>
 <label>Number</label><input id="num" value="001">
 <label>Date</label><input id="date" type="date">
 <label>Line items (description, qty, unit price)</label>
@@ -50,19 +61,37 @@ footer{text-align:center;padding:24px;font-size:13px;color:#64748b}footer a{colo
 </div>
 <div id="doc"></div>
 </main>
-<footer><a href="./">Home</a><a href="guides.html">Guides</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refunds.html">Refunds</a><a href="contact.html">Contact</a><br>© 2026 QuoteSnap · friersonmarcus5@gmail.com</footer>
+<footer><a href="./">Home</a><a href="templates.html">Templates</a><a href="guides.html">Guides</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="refunds.html">Refunds</a><a href="contact.html">Contact</a><br>© 2026 QuoteSnap · friersonmarcus5@gmail.com</footer>
 <script>
 const PAYMENT_LINK="https://buy.stripe.com/6oU28s4lE5G99huawt4Rq03";
-// Paid buyers can also use: https://marndmee-beep.github.io/quotesnap/pro.html
 const PRO_CODE="snap-7kq4m2xv";
+const TRADES={
+"Trades & home":[['Plumber','Diagnostic / call-out fee','Supply and fit replacement tap'],['Electrician','Fault finding, first hour','Supply and fit socket outlet'],['Builder','Day rate, labour only','Materials and waste removal'],['Carpenter','Fitting day rate','Supply and fit skirting'],['Roofer','Scaffold erection','Strip and re-cover roof section'],['Plasterer','Board and skim, per m2','Patch repair'],['Painter & decorator','Preparation and priming','Two coats emulsion, per room'],['Landscaper','Design and groundwork','Turf supply and lay'],['Cleaner','Deep clean, per bedroom','End of tenancy clean'],['Removal & haulage','Van and two movers, per hour','Waste disposal fee'],['Locksmith','Emergency call-out','Supply and fit lock cylinder'],['HVAC technician','Service and safety check','Refrigerant top-up']],
+"Freelance & creative":[['Photographer','Half-day shoot','Edited image delivery, per 10'],['Videographer','Filming day','Edit and colour grade'],['Graphic designer','Logo concepts, three routes','Brand guidelines document'],['Web developer','Page build','Bug fix, per hour'],['Copywriter','Blog article, 1,000 words','Landing page copy'],['Social media manager','Monthly management retainer','Content calendar'],['Virtual assistant','Hourly retainer, per month','Inbox management'],['Consultant','Discovery session','Strategy report'],['Tutor','One-hour session','Block of ten sessions'],['Personal trainer','One-to-one session','Six-week programme'],['Musician','Event performance, two sets','Travel and equipment'],['Translator','Translation, per 1,000 words','Certified copy']],
+"Business services":[['Accountant','Tax return preparation','Bookkeeping, monthly'],['Bookkeeper','Quarterly reconciliation','Software setup'],['Marketing agency','Campaign setup','Monthly management fee'],['IT support','Onsite visit','Managed support, per user'],['Website maintenance','Monthly updates and backups','Emergency fix'],['Courier & delivery','Same-day delivery','Additional stops'],['Event planner','Planning fee','On-the-day coordination'],['Caterer','Per-head catering','Equipment hire'],['Beauty & hair','Cut and finish','Colour treatment'],['Massage therapist','60-minute treatment','Course of four'],['Dog walker','Group walk, per hour','Solo walk'],['Pet groomer','Full groom','Nail trim']]
+};
+let items=JSON.parse(localStorage.getItem("qs_items")||'[["Service",1,100]]');
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const params=new URLSearchParams(location.search);
 if(params.get("pro")===PRO_CODE)localStorage.setItem("qs_pro","1");
 const pro=localStorage.getItem("qs_pro")==="1";
 document.getElementById("buy").href=PAYMENT_LINK;
 if(pro)document.querySelector(".upsell").style.display="none";
-const $=id=>document.getElementById(id);
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-let items=JSON.parse(localStorage.getItem("qs_items")||'[["Service",1,100]]');
+function drawPresets(){
+ const cats=Object.keys(TRADES);
+ if(!cats.includes(localStorage.getItem("qs_cat")))localStorage.setItem("qs_cat",cats[0]);
+ const cat=localStorage.getItem("qs_cat");
+ $("cats").innerHTML=cats.map(c=>`<button class="${c===cat?'on':''}" onclick="setCat('${c}')">${c}</button>`).join("");
+ $("presets").innerHTML=TRADES[cat].map(t=>`<div class="catcard"><h3>${t[0]}</h3>
+ <div class="presets">${t.slice(1).map(s=>`<button onclick="applyPreset('${s.replace(/'/g,'')}')">${s}</button>`).join("")}</div></div>`).join("");
+}
+function setCat(c){localStorage.setItem("qs_cat",c);drawPresets()}
+function applyPreset(line){
+ const empty=items.findIndex(i=>!String(i[0]).trim());
+ if(empty>=0){items[empty][0]=line}else{items.push([line,1,0])}
+ draw();
+}
 function addItem(){items.push(["",1,0]);draw()}
 function del(i){items.splice(i,1);draw()}
 function draw(){
@@ -90,5 +119,5 @@ function render(){
 ["biz","bizc","cli","num","date","notes","cur","tax","type"].forEach(k=>{
  const v=localStorage.getItem("qs_"+k);if(v!==null)$(k).value=v;$(k).addEventListener("input",render)});
 if(!$("date").value)$("date").value=new Date().toISOString().slice(0,10);
-draw();
+drawPresets();draw();
 </script></body></html>
